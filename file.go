@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/tiantour/requests"
+	"github.com/tiantour/fetch"
 )
 
 // Name
@@ -20,8 +20,7 @@ func (i *file) name() (imageName string) {
 
 // Net
 func (i *file) net(imageURL string) (imageByte []byte, err error) {
-	_, requestData, requestHeader := requests.Options()
-	imageByte, err = requests.Get(imageURL, requestData, requestHeader)
+	imageByte, err = fetch.Cmd("get", imageURL)
 	return
 }
 
