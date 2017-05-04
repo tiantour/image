@@ -9,9 +9,9 @@ import (
 )
 
 var up = upyun.NewUpYun(
-	conf.Options.Upyun.Bucket,
-	conf.Options.Upyun.Username,
-	conf.Options.Upyun.Passwd,
+	conf.Data.Upyun.Bucket,
+	conf.Data.Upyun.Username,
+	conf.Data.Upyun.Passwd,
 )
 
 //Net
@@ -26,10 +26,10 @@ func (u *upy) Net(imageURL string) (imagePath string, err error) {
 
 //Local
 func (u *upy) Local(imageByte []byte) (imagePath string, err error) {
-	host := conf.Options.Upyun.Host                                          // host
-	filePath := fmt.Sprintf("%s/%s", conf.Options.Upyun.Bucket, File.name()) // filePath
-	data := bytes.NewBuffer(imageByte)                                       // io.reader
-	_, err = up.Put(filePath, data, false, map[string]string{})              // 上传
+	host := conf.Data.Upyun.Host                                          // host
+	filePath := fmt.Sprintf("%s/%s", conf.Data.Upyun.Bucket, File.name()) // filePath
+	data := bytes.NewBuffer(imageByte)                                      // io.reader
+	_, err = up.Put(filePath, data, false, map[string]string{})             // 上传
 	if err != nil {
 		return
 	}
