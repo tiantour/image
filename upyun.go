@@ -8,11 +8,11 @@ import (
 	"github.com/upyun/go-sdk/upyun"
 )
 
-var up = upyun.NewUpYun(
-	conf.Data.Upyun.Bucket,
-	conf.Data.Upyun.Username,
-	conf.Data.Upyun.Passwd,
-)
+var up = upyun.NewUpYun(&upyun.UpYunConfig{
+	Bucket:   conf.Data.Upyun.Bucket,
+	Operator: conf.Data.Upyun.Username,
+	Password: conf.Data.Upyun.Passwd,
+})
 
 //Net
 func (u *upy) Net(imageURL string) (imagePath string, err error) {
@@ -26,10 +26,12 @@ func (u *upy) Net(imageURL string) (imagePath string, err error) {
 
 //Local
 func (u *upy) Local(imageByte []byte) (imagePath string, err error) {
-	host := conf.Data.Upyun.Host                                          // host
+	host := conf.Data.Upyun.Host
 	filePath := fmt.Sprintf("%s/%s", conf.Data.Upyun.Bucket, File.name()) // filePath
-	data := bytes.NewBuffer(imageByte)                                      // io.reader
-	_, err = up.Put(filePath, data, false, map[string]string{})             // 上传
+	err = up.Put(&upyun.PutObjectConfig{
+		Path:   filePath,
+		Reader: bytes.NewBuffer(imageByte),
+	})
 	if err != nil {
 		return
 	}
