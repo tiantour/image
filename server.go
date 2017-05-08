@@ -21,9 +21,8 @@ func (s *server) Net(imageURL string) (imagePath string, err error) {
 
 // Local
 func (s *server) Local(imageByte []byte) (imagePath string, err error) {
-	host := fmt.Sprintf("%s:%s", conf.Data.Server.Host, conf.Data.Server.Port) // host
-	filePath := fmt.Sprintf("%s/%s", conf.Data.Server.Upload, File.name())       // filePath
-	f, err := os.Create(filePath)                                                  // Create
+	filePath := fmt.Sprintf("%s/%s", conf.Data.Server.Upload, File.name()) // filePath
+	f, err := os.Create(filePath)                                          // Create
 	if err != nil {
 		return
 	}
@@ -33,6 +32,6 @@ func (s *server) Local(imageByte []byte) (imagePath string, err error) {
 	if err != nil {
 		return
 	}
-	imagePath = fmt.Sprintf("%s/%s", host, filePath) // image path
+	imagePath = fmt.Sprintf("%s/%s", conf.Data.Server.Domain, filePath) // image path
 	return
 }
