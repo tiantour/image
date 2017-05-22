@@ -23,8 +23,6 @@ func init() {
 }
 
 // Net net upload
-// date 2017-05-22
-// author andy.jiang
 func (q Qiniu) Net(url string) (string, error) {
 	body, err := NewFile().Net(url)
 	if err != nil {
@@ -34,8 +32,6 @@ func (q Qiniu) Net(url string) (string, error) {
 }
 
 // Local local upload
-// date 2017-05-22
-// author andy.jiang
 func (q Qiniu) Local(body []byte) (string, error) {
 	host := conf.NewConf().Qiniu.Host // host
 	path := fmt.Sprintf("%s/%s",

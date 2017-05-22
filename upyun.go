@@ -23,8 +23,6 @@ var up = upyun.NewUpYun(&upyun.UpYunConfig{
 })
 
 // Net net upload
-// date 2017-05-22
-// author andy.jiang
 func (u Upyun) Net(url string) (string, error) {
 	body, err := NewFile().Net(url)
 	if err != nil {
@@ -34,8 +32,6 @@ func (u Upyun) Net(url string) (string, error) {
 }
 
 // Local local upload
-// date 2017-05-22
-// author andy.jiang
 func (u Upyun) Local(body []byte) (string, error) {
 	host := conf.NewConf().Upyun.Host
 	path := fmt.Sprintf("%s/%s",

@@ -18,8 +18,6 @@ func NewServer() *Server {
 }
 
 // Net net upload
-// date 2017-05-22
-// author andy.jiang
 func (s Server) Net(url string) (string, error) {
 	body, err := NewFile().Net(url)
 	if err != nil {
@@ -29,8 +27,6 @@ func (s Server) Net(url string) (string, error) {
 }
 
 // Local local upload
-// date 2017-05-22
-// author andy.jiang
 func (s Server) Local(imageByte []byte) (imagePath string, err error) {
 	path := fmt.Sprintf("%s/%s",
 		conf.NewConf().Server.Upload,

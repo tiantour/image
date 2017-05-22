@@ -19,8 +19,6 @@ func NewFile() *File {
 }
 
 // Name get file name
-// date 2017-05-22
-// author andy.jiang
 func (f File) Name() string {
 	now := time.Now().UnixNano()
 	name := strconv.FormatInt(now, 10)
@@ -28,8 +26,6 @@ func (f File) Name() string {
 }
 
 // Net read net file
-// date 2017-05-22
-// author andy.jiang
 func (f File) Net(url string) ([]byte, error) {
 	return fetch.Cmd(fetch.Request{
 		Method: "GET",
@@ -38,8 +34,6 @@ func (f File) Net(url string) ([]byte, error) {
 }
 
 // Local read local file
-// date 2017-05-22
-// author andy.jiang
 func (f File) Local(path string) ([]byte, error) {
 	imageFile, err := os.Open(path)
 	if err != nil {
