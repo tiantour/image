@@ -8,33 +8,46 @@ import (
 	"github.com/upyun/go-sdk/upyun"
 )
 
-var up = upyun.NewUpYun(&upyun.UpYunConfig{
-	Bucket:   conf.Data.Upyun.Bucket,
-	Operator: conf.Data.Upyun.Username,
-	Password: conf.Data.Upyun.Passwd,
-})
+// Upyun upyun
+type Upyun struct{}
 
-//Net
-func (u *upy) Net(imageURL string) (imagePath string, err error) {
-	imageByte, err := File.net(imageURL)
-	if err != nil {
-		return
-	}
-	imagePath, err = Upyun.Local(imageByte)
-	return
+// NewUpyun new upyun
+func NewUpyun() *Upyun {
+	return &Upyun{}
 }
 
-//Local
-func (u *upy) Local(imageByte []byte) (imagePath string, err error) {
-	host := conf.Data.Upyun.Host
-	filePath := fmt.Sprintf("%s/%s", conf.Data.Upyun.Bucket, File.name()) // filePath
-	err = up.Put(&upyun.PutObjectConfig{
-		Path:   filePath,
-		Reader: bytes.NewBuffer(imageByte),
+var up = upyun.NewUpYun(&upyun.UpYunConfig{
+	Bucket:   conf.NewConf().Upyun.Bucket,
+	Operator: conf.NewConf().Upyun.Username,
+	Password: conf.NewConf().Upyun.Passwd,
+})
+
+// Net net upload
+// date 2017-05-22
+// author andy.jiang
+func (u Upyun) Net(url string) (string, error) {
+	body, err := NewFile().Net(url)
+	if err != nil {
+		return "", err
+	}
+	return u.Local(body)
+}
+
+// Local local upload
+// date 2017-05-22
+// author andy.jiang
+func (u Upyun) Local(body []byte) (string, error) {
+	host := conf.NewConf().Upyun.Host
+	path := fmt.Sprintf("%s/%s",
+		conf.NewConf().Upyun.Bucket,
+		NewFile().Name(),
+	)
+	err := up.Put(&upyun.PutObjectConfig{
+		Path:   path,
+		Reader: bytes.NewBuffer(body),
 	})
 	if err != nil {
-		return
+		return "", err
 	}
-	imagePath = fmt.Sprintf("%s/%s", host, filePath) // image path
-	return
+	return fmt.Sprintf("%s/%s", host, path), nil
 }

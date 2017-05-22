@@ -9,36 +9,48 @@ import (
 	"github.com/tiantour/conf"
 )
 
+// Qiniu qiniu
+type Qiniu struct{}
+
+// NewQiniu new qiniu
+func NewQiniu() *Qiniu {
+	return &Qiniu{}
+}
+
 // init
 func init() {
-	kodo.SetMac(conf.Data.Qiniu.AccessKey, conf.Data.Qiniu.SecretKey)
+	kodo.SetMac(conf.NewConf().Qiniu.AccessKey, conf.NewConf().Qiniu.SecretKey)
 }
 
-// Net
-func (q *qn) Net(imageURL string) (imagePath string, err error) {
-	imageByte, err := File.net(imageURL)
+// Net net upload
+// date 2017-05-22
+// author andy.jiang
+func (q Qiniu) Net(url string) (string, error) {
+	body, err := NewFile().Net(url)
 	if err != nil {
-		return
+		return "", err
 	}
-	bytes.NewBuffer(imageByte)
-	imagePath, err = Qiniu.Local(imageByte)
-	return
+	return q.Local(body)
 }
 
-//Local
-func (q *qn) Local(imageByte []byte) (imagePath string, err error) {
-	host := conf.Data.Qiniu.Host                                          // host
-	filePath := fmt.Sprintf("%s/%s", conf.Data.Qiniu.Bucket, File.name()) //filePath
-	zone := 0                                                               // 您空间(Bucket)所在的区域
-	c := kodo.New(zone, nil)                                                // 用默认配置创建 Client
-	bucket := c.Bucket(conf.Data.Qiniu.Bucket)                            // 空间
+// Local local upload
+// date 2017-05-22
+// author andy.jiang
+func (q Qiniu) Local(body []byte) (string, error) {
+	host := conf.NewConf().Qiniu.Host // host
+	path := fmt.Sprintf("%s/%s",
+		conf.NewConf().Qiniu.Bucket,
+		NewFile().Name(),
+	)
+	zone := 0                                       // 您空间(Bucket)所在的区域
+	c := kodo.New(zone, nil)                        // 用默认配置创建 Client
+	bucket := c.Bucket(conf.NewConf().Qiniu.Bucket) // 空间
 	ctx := context.Background()
-	data := bytes.NewBuffer(imageByte)                    // io.reader
-	size := int64(len(imageByte))                         // 长度
-	err = bucket.Put(ctx, nil, filePath, data, size, nil) // 上传
+	data := bytes.NewBuffer(body)                      // io.reader
+	size := int64(len(body))                           // 长度
+	err := bucket.Put(ctx, nil, path, data, size, nil) // 上传
 	if err != nil {
-		return
+		return "", err
 	}
-	imagePath = fmt.Sprintf("%s/%s", host, filePath) // image path
-	return
+	return fmt.Sprintf("%s/%s", host, path), nil
 }

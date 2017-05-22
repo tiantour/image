@@ -9,29 +9,45 @@ import (
 	"github.com/tiantour/conf"
 )
 
-// Net
-func (s *server) Net(imageURL string) (imagePath string, err error) {
-	imageByte, err := File.net(imageURL)
-	if err != nil {
-		return
-	}
-	imagePath, err = Server.Local(imageByte)
-	return
+// Server server
+type Server struct{}
+
+// NewServer new server
+func NewServer() *Server {
+	return &Server{}
 }
 
-// Local
-func (s *server) Local(imageByte []byte) (imagePath string, err error) {
-	filePath := fmt.Sprintf("%s/%s", conf.Data.Server.Upload, File.name()) // filePath
-	f, err := os.Create(filePath)                                          // Create
+// Net net upload
+// date 2017-05-22
+// author andy.jiang
+func (s Server) Net(url string) (string, error) {
+	body, err := NewFile().Net(url)
 	if err != nil {
-		return
+		return "", err
+	}
+	return s.Local(body)
+}
+
+// Local local upload
+// date 2017-05-22
+// author andy.jiang
+func (s Server) Local(imageByte []byte) (imagePath string, err error) {
+	path := fmt.Sprintf("%s/%s",
+		conf.NewConf().Server.Upload,
+		NewFile().Name(),
+	)
+	f, err := os.Create(path)
+	if err != nil {
+		return "", err
 	}
 	defer f.Close()
 	data := bytes.NewBuffer(imageByte) // io.reader
 	_, err = io.Copy(f, data)          // write
 	if err != nil {
-		return
+		return "", err
 	}
-	imagePath = fmt.Sprintf("%s/%s", conf.Data.Server.Domain, filePath) // image path
-	return
+	return fmt.Sprintf("%s/%s",
+		conf.NewConf().Server.Domain,
+		path,
+	), nil
 }
