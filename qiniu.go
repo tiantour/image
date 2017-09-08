@@ -42,9 +42,8 @@ func (q Qiniu) Local(body []byte) (string, error) {
 	c := kodo.New(zone, nil)                        // 用默认配置创建 Client
 	bucket := c.Bucket(conf.NewConf().Qiniu.Bucket) // 空间
 	ctx := context.Background()
-	data := bytes.NewBuffer(body)                      // io.reader
-	size := int64(len(body))                           // 长度
-	err := bucket.Put(ctx, nil, path, data, size, nil) // 上传
+	data := bytes.NewBuffer(body)                                  // io.reader
+	err := bucket.Put(ctx, nil, path, data, int64(len(body)), nil) // 上传
 	if err != nil {
 		return "", err
 	}
