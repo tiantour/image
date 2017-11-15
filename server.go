@@ -4,9 +4,8 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"log"
 	"os"
-
-	"github.com/tiantour/conf"
 )
 
 // Server server
@@ -14,6 +13,9 @@ type Server struct{}
 
 // NewServer new server
 func NewServer() *Server {
+	if ServerBucket == "" || ServerHost == "" {
+		log.Fatal("image conf is null")
+	}
 	return &Server{}
 }
 
@@ -29,7 +31,7 @@ func (s Server) Net(url string) (string, error) {
 // Local local upload
 func (s Server) Local(imageByte []byte) (imagePath string, err error) {
 	path := fmt.Sprintf("%s/%s",
-		conf.NewConf().Server.Upload,
+		ServerBucket,
 		NewFile().Name(),
 	)
 	f, err := os.Create(path)
@@ -42,8 +44,5 @@ func (s Server) Local(imageByte []byte) (imagePath string, err error) {
 	if err != nil {
 		return "", err
 	}
-	return fmt.Sprintf("%s/%s",
-		conf.NewConf().Server.Domain,
-		path,
-	), nil
+	return fmt.Sprintf("%s/%s", ServerHost, path), nil
 }

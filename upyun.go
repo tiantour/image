@@ -3,24 +3,28 @@ package image
 import (
 	"bytes"
 	"fmt"
+	"log"
 
-	"github.com/tiantour/conf"
 	"github.com/upyun/go-sdk/upyun"
 )
+
+var up *upyun.UpYun
 
 // Upyun upyun
 type Upyun struct{}
 
 // NewUpyun new upyun
 func NewUpyun() *Upyun {
+	if UpyunBucket == "" || UpyunHost == "" || UpyunUname == "" || UpyunPasswd == "" {
+		log.Fatal("image conf is null")
+	}
+	up = upyun.NewUpYun(&upyun.UpYunConfig{
+		Bucket:   UpyunBucket,
+		Operator: UpyunUname,
+		Password: UpyunPasswd,
+	})
 	return &Upyun{}
 }
-
-var up = upyun.NewUpYun(&upyun.UpYunConfig{
-	Bucket:   conf.NewConf().Upyun.Bucket,
-	Operator: conf.NewConf().Upyun.Username,
-	Password: conf.NewConf().Upyun.Passwd,
-})
 
 // Net net upload
 func (u Upyun) Net(url string) (string, error) {
@@ -33,9 +37,8 @@ func (u Upyun) Net(url string) (string, error) {
 
 // Local local upload
 func (u Upyun) Local(body []byte) (string, error) {
-	host := conf.NewConf().Upyun.Host
 	path := fmt.Sprintf("%s/%s",
-		conf.NewConf().Upyun.Bucket,
+		UpyunBucket,
 		NewFile().Name(),
 	)
 	err := up.Put(&upyun.PutObjectConfig{
@@ -45,5 +48,5 @@ func (u Upyun) Local(body []byte) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return fmt.Sprintf("%s/%s", host, path), nil
+	return fmt.Sprintf("%s/%s", UpyunHost, path), nil
 }
