@@ -3,26 +3,29 @@ package image
 import (
 	"bytes"
 	"fmt"
-	"log"
 
+	"github.com/tiantour/conf"
 	"github.com/upyun/go-sdk/upyun"
 )
 
-var up *upyun.UpYun
+var (
+	up  *upyun.UpYun
+	cfu = conf.NewConf().Image["upyun"]
+)
+
+func init() {
+	up = upyun.NewUpYun(&upyun.UpYunConfig{
+		Bucket:   cfu.Bucket,
+		Operator: cfu.Uname,
+		Password: cfu.Passwd,
+	})
+}
 
 // Upyun upyun
 type Upyun struct{}
 
 // NewUpyun new upyun
 func NewUpyun() *Upyun {
-	if UpyunBucket == "" || UpyunHost == "" || UpyunUname == "" || UpyunPasswd == "" {
-		log.Fatal("image conf is null")
-	}
-	up = upyun.NewUpYun(&upyun.UpYunConfig{
-		Bucket:   UpyunBucket,
-		Operator: UpyunUname,
-		Password: UpyunPasswd,
-	})
 	return &Upyun{}
 }
 
@@ -38,7 +41,7 @@ func (u Upyun) Net(url string) (string, error) {
 // Local local upload
 func (u Upyun) Local(body []byte) (string, error) {
 	path := fmt.Sprintf("%s/%s",
-		UpyunBucket,
+		cfu.Bucket,
 		NewFile().Name(),
 	)
 	err := up.Put(&upyun.PutObjectConfig{
@@ -48,5 +51,5 @@ func (u Upyun) Local(body []byte) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return fmt.Sprintf("%s/%s", UpyunHost, path), nil
+	return fmt.Sprintf("%s/%s", cfu.Host, path), nil
 }
