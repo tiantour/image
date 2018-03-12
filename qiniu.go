@@ -5,16 +5,18 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/qiniu/api.v7/kodo"
+	"github.com/qiniu/api.v7/auth/qbox"
+	"github.com/qiniu/api.v7/storage"
 	"github.com/tiantour/conf"
 )
 
 var (
+	mac *qbox.Mac
 	cfq = conf.NewConf().Image["qiniu"]
 )
 
 func init() {
-	kodo.SetMac(cfq.Uname, cfq.Passwd)
+	mac = qbox.NewMac(cfq.Uname, cfq.Passwd)
 }
 
 // Qiniu qiniu
@@ -26,7 +28,7 @@ func NewQiniu() *Qiniu {
 }
 
 // Net net upload
-func (q Qiniu) Net(url string) (string, error) {
+func (q *Qiniu) Net(url string) (string, error) {
 	body, err := NewFile().Net(url)
 	if err != nil {
 		return "", err
@@ -35,19 +37,22 @@ func (q Qiniu) Net(url string) (string, error) {
 }
 
 // Local local upload
-func (q Qiniu) Local(body []byte) (string, error) {
-	path := fmt.Sprintf("%s/%s",
-		cfq.Bucket,
-		NewFile().Name(),
-	)
-	zone := 0                      // 您空间(Bucket)所在的区域
-	c := kodo.New(zone, nil)       // 用默认配置创建 Client
-	bucket := c.Bucket(cfq.Bucket) // 空间
-	ctx := context.Background()
-	data := bytes.NewBuffer(body)                                  // io.reader
-	err := bucket.Put(ctx, nil, path, data, int64(len(body)), nil) // 上传
+func (q *Qiniu) Local(body []byte) (string, error) {
+	putPolicy := storage.PutPolicy{
+		Scope: cfq.Bucket,
+	}
+	upToken := putPolicy.UploadToken(mac)
+	formUploader := storage.NewFormUploader(&storage.Config{
+		Zone:          &storage.Zone_z0,
+		UseHTTPS:      false,
+		UseCdnDomains: false,
+	})
+	key := NewFile().Name()
+	data := bytes.NewReader(body)
+	dataLen := int64(len(body))
+	err := formUploader.Put(context.Background(), nil, upToken, key, data, dataLen, nil) // 上传
 	if err != nil {
 		return "", err
 	}
-	return fmt.Sprintf("%s/%s", cfq.Host, path), nil
+	return fmt.Sprintf("%s/%s/%s", cfq.Host, cfq.Bucket, key), nil
 }

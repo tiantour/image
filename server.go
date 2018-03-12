@@ -22,7 +22,7 @@ func NewServer() *Server {
 }
 
 // Net net upload
-func (s Server) Net(url string) (string, error) {
+func (s *Server) Net(url string) (string, error) {
 	body, err := NewFile().Net(url)
 	if err != nil {
 		return "", err
@@ -31,11 +31,8 @@ func (s Server) Net(url string) (string, error) {
 }
 
 // Local local upload
-func (s Server) Local(imageByte []byte) (imagePath string, err error) {
-	path := fmt.Sprintf("%s/%s",
-		cfs.Bucket,
-		NewFile().Name(),
-	)
+func (s *Server) Local(imageByte []byte) (imagePath string, err error) {
+	path := fmt.Sprintf("%s/%s", cfs.Bucket, NewFile().Name())
 	f, err := os.Create(path)
 	if err != nil {
 		return "", err

@@ -30,7 +30,7 @@ func NewUpyun() *Upyun {
 }
 
 // Net net upload
-func (u Upyun) Net(url string) (string, error) {
+func (u *Upyun) Net(url string) (string, error) {
 	body, err := NewFile().Net(url)
 	if err != nil {
 		return "", err
@@ -39,11 +39,8 @@ func (u Upyun) Net(url string) (string, error) {
 }
 
 // Local local upload
-func (u Upyun) Local(body []byte) (string, error) {
-	path := fmt.Sprintf("%s/%s",
-		cfu.Bucket,
-		NewFile().Name(),
-	)
+func (u *Upyun) Local(body []byte) (string, error) {
+	path := fmt.Sprintf("%s/%s", cfu.Bucket, NewFile().Name())
 	err := up.Put(&upyun.PutObjectConfig{
 		Path:   path,
 		Reader: bytes.NewBuffer(body),
