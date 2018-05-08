@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"strconv"
 	"time"
 
 	"github.com/tiantour/fetch"
 )
+
+// Prefix file pre fix
+var Prefix string
 
 // File file
 type File struct{}
@@ -20,9 +22,10 @@ func NewFile() *File {
 
 // Name get file name
 func (f *File) Name() string {
-	now := time.Now().UnixNano()
-	name := strconv.FormatInt(now, 10)
-	return fmt.Sprintf("file_%s.jpg", name)
+	if Prefix == "" {
+		Prefix = "file"
+	}
+	return fmt.Sprintf("%s/%d.jpg", Prefix, time.Now().UnixNano())
 }
 
 // Net read net file
