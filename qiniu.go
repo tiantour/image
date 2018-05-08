@@ -54,5 +54,5 @@ func (q *Qiniu) Local(body []byte) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return fmt.Sprintf("%s/%s/%s", cfq.Host, cfq.Bucket, key), nil
+	return fmt.Sprintf("%s/%s", cfq.Host, key), nil
 }
