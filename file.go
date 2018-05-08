@@ -9,8 +9,10 @@ import (
 	"github.com/tiantour/fetch"
 )
 
-// Prefix file pre fix
-var Prefix string
+var (
+	// Prefix file pre fix
+	Prefix = "file"
+)
 
 // File file
 type File struct{}
@@ -22,9 +24,6 @@ func NewFile() *File {
 
 // Name get file name
 func (f *File) Name() string {
-	if Prefix == "" {
-		Prefix = "file"
-	}
 	return fmt.Sprintf("%s/%d.jpg", Prefix, time.Now().UnixNano())
 }
 
