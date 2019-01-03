@@ -12,7 +12,7 @@ import (
 
 var (
 	mac *qbox.Mac
-	cfq = conf.NewConf().Image["qiniu"]
+	cfq = conf.NewImage().Data["qiniu"]
 )
 
 func init() {
@@ -50,7 +50,7 @@ func (q *Qiniu) Local(body []byte) (string, error) {
 	key := NewFile().Name()
 	data := bytes.NewReader(body)
 	dataLen := int64(len(body))
-	err := formUploader.Put(context.Background(), nil, upToken, key, data, dataLen, nil) // 上传
+	err := formUploader.Put(context.Background(), &storage.PutRet{}, upToken, key, data, dataLen, &storage.PutExtra{}) // 上传
 	if err != nil {
 		return "", err
 	}

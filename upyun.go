@@ -10,7 +10,7 @@ import (
 
 var (
 	up  *upyun.UpYun
-	cfu = conf.NewConf().Image["upyun"]
+	cfu = conf.NewImage().Data["upyun"]
 )
 
 func init() {

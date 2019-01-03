@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	cfs = conf.NewConf().Image["server"]
+	cfs = conf.NewImage().Data["server"]
 )
 
 // Server server
