@@ -29,7 +29,7 @@ func (f *File) Name() string {
 
 // Net read net file
 func (f *File) Net(url string) ([]byte, error) {
-	return fetch.Cmd(fetch.Request{
+	return fetch.Cmd(&fetch.Request{
 		Method: "GET",
 		URL:    url,
 	})

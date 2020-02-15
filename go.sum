@@ -1,10 +1,10 @@
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/qiniu/api.v7/v7 v7.4.0 h1:9dZMVQifh31QGFLVaHls6akCaS2rlj3du8MnEFd7XjQ=
-github.com/qiniu/api.v7/v7 v7.4.0/go.mod h1:VE5oC5rkE1xul0u1S2N0b2Uxq9/6hZzhyqjgK25XDcM=
-github.com/tiantour/conf v1.0.0 h1:DyUtHliemv7idTupalbWeIVvQ1+o9d8rQjic4LYCMW8=
-github.com/tiantour/conf v1.0.0/go.mod h1:oopD0jGktJPIODpJ/MlNSp8olNGgyzZjmI/VTcgAwiI=
-github.com/tiantour/fetch v1.0.0 h1:ouu69JNu+vUIAEuRLOypqPfL5dpGP1jCM7lzE4UEHQw=
-github.com/tiantour/fetch v1.0.0/go.mod h1:1mzoDmsNzgJwDcXWbNdrSd0qNbniSobmsQip9bHzuso=
+github.com/qiniu/api.v7/v7 v7.4.1 h1:BnNUBimLk6nrA/mIwsww9yJRupmViSsb1ndLMC7a9OY=
+github.com/qiniu/api.v7/v7 v7.4.1/go.mod h1:VE5oC5rkE1xul0u1S2N0b2Uxq9/6hZzhyqjgK25XDcM=
+github.com/tiantour/conf v1.3.0 h1:+fUvfQqJ1xA/vEpQM04xD89F0ypoy4kefPMgVras3CE=
+github.com/tiantour/conf v1.3.0/go.mod h1:JUe3gGsBp/A8ioHbsdMPEsxouYHcWAX16GeHSmfd7BU=
+github.com/tiantour/fetch v1.0.3 h1:mEe889Scc+XT7m9I8SyeACfTDGggqKESUgQtg1Q1cQs=
+github.com/tiantour/fetch v1.0.3/go.mod h1:5oOFK9vdQPGe7AWAajWl6j1yWNju/HAuLmENMv/0U6c=
 github.com/upyun/go-sdk v2.1.0+incompatible h1:OdjXghQ/TVetWV16Pz3C1/SUpjhGBVPr+cLiqZLLyq0=
 github.com/upyun/go-sdk v2.1.0+incompatible/go.mod h1:eu3F5Uz4b9ZE5bE5QsCL6mgSNWRwfj0zpJ9J626HEqs=
