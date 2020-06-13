@@ -33,7 +33,7 @@ func (q *Qiniu) Local(args *Image) (string, error) {
 // do
 func (q *Qiniu) do(args *Image) error {
 	putPolicy := storage.PutPolicy{
-		Scope: cfq.Bucket,
+		Scope: fmt.Sprintf("%s:%s", cfq.Bucket, args.Path),
 	}
 	upToken := putPolicy.UploadToken(mac)
 
