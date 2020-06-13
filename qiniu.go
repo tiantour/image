@@ -17,7 +17,7 @@ func NewQiniu() *Qiniu {
 }
 
 // Local local upload
-func (q *Qiniu) Local(args *File) (string, error) {
+func (q *Qiniu) Local(args *Image) (string, error) {
 	args.Name = NewFormat().Name(args)
 	args.Path = NewFormat().Path(args)
 
@@ -31,7 +31,7 @@ func (q *Qiniu) Local(args *File) (string, error) {
 }
 
 // do
-func (q *Qiniu) do(args *File) error {
+func (q *Qiniu) do(args *Image) error {
 	putPolicy := storage.PutPolicy{
 		Scope: cfq.Bucket,
 	}

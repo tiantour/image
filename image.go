@@ -6,12 +6,12 @@ import (
 	"github.com/upyun/go-sdk/upyun"
 )
 
-// File file
-type File struct {
+// Image image
+type Image struct {
 	Body   []byte // 内容
 	Name   string // 名称
 	Path   string // 路径
-	Prefix int64  // 前缀
+	Prefix string // 前缀
 	Size   int64  // 大小
 }
 

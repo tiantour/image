@@ -16,7 +16,7 @@ func NewUpyun() *Upyun {
 }
 
 // Local local upload
-func (u *Upyun) Local(args *File) (string, error) {
+func (u *Upyun) Local(args *Image) (string, error) {
 	args.Name = NewFormat().Name(args)
 	args.Path = NewFormat().Path(args)
 
@@ -30,7 +30,7 @@ func (u *Upyun) Local(args *File) (string, error) {
 }
 
 // do
-func (u *Upyun) do(args *File) error {
+func (u *Upyun) do(args *Image) error {
 	path := fmt.Sprintf("%s/%s", cfu.Bucket, args.Path)
 
 	return up.Put(&upyun.PutObjectConfig{

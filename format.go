@@ -15,20 +15,20 @@ func NewFormat() *Format {
 }
 
 // Name format name
-func (f *Format) Name(args *File) string {
+func (f *Format) Name(args *Image) string {
 	name := path.Base(args.Name)
 
 	suffix := path.Ext(name)
 	prefix := args.Prefix
-	if prefix == 0 {
-		prefix = time.Now().UnixNano()
+	if prefix == "" {
+		prefix = fmt.Sprintf("%d", time.Now().UnixNano())
 	}
 
-	return fmt.Sprintf("%d%s", prefix, suffix)
+	return fmt.Sprintf("%s%s", prefix, suffix)
 }
 
 // Path format path
-func (f *Format) Path(args *File) string {
+func (f *Format) Path(args *Image) string {
 	path := args.Path
 	if path == "" {
 		path = "file"

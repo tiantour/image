@@ -16,7 +16,7 @@ func NewServer() *Server {
 }
 
 // Local local upload
-func (s *Server) Local(args *File) (string, error) {
+func (s *Server) Local(args *Image) (string, error) {
 	args.Name = NewFormat().Name(args)
 	args.Path = NewFormat().Path(args)
 
@@ -30,7 +30,7 @@ func (s *Server) Local(args *File) (string, error) {
 }
 
 // do
-func (s *Server) do(args *File) error {
+func (s *Server) do(args *Image) error {
 	path := fmt.Sprintf("%s/%s", cfs.Bucket, args.Path)
 
 	f, err := os.Create(path)
