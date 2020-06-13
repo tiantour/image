@@ -5,19 +5,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/qiniu/api.v7/v7/auth/qbox"
 	"github.com/qiniu/api.v7/v7/storage"
-	"github.com/tiantour/conf"
 )
-
-var (
-	mac *qbox.Mac
-	cfq = conf.NewImage().Data["qiniu"]
-)
-
-func init() {
-	mac = qbox.NewMac(cfq.Uname, cfq.Passwd)
-}
 
 // Qiniu qiniu
 type Qiniu struct{}
@@ -27,32 +16,40 @@ func NewQiniu() *Qiniu {
 	return &Qiniu{}
 }
 
-// Net net upload
-func (q *Qiniu) Net(url string) (string, error) {
-	body, err := NewFile().Net(url)
+// Local local upload
+func (q *Qiniu) Local(args *File) (string, error) {
+	args.Name = NewFormat().Name(args)
+	args.Path = NewFormat().Path(args)
+
+	err := q.do(args)
 	if err != nil {
 		return "", err
 	}
-	return q.Local(body)
+
+	path := fmt.Sprintf("%s/%s", cfq.Host, args.Path)
+	return path, nil
 }
 
-// Local local upload
-func (q *Qiniu) Local(body []byte) (string, error) {
+// do
+func (q *Qiniu) do(args *File) error {
 	putPolicy := storage.PutPolicy{
 		Scope: cfq.Bucket,
 	}
 	upToken := putPolicy.UploadToken(mac)
+
 	formUploader := storage.NewFormUploader(&storage.Config{
-		Zone:          &storage.Zone_z0,
+		Zone:          &storage.ZoneHuadong,
 		UseHTTPS:      false,
 		UseCdnDomains: false,
 	})
-	key := NewFile().Name()
-	data := bytes.NewReader(body)
-	dataLen := int64(len(body))
-	err := formUploader.Put(context.Background(), &storage.PutRet{}, upToken, key, data, dataLen, &storage.PutExtra{}) // 上传
-	if err != nil {
-		return "", err
-	}
-	return fmt.Sprintf("%s/%s", cfq.Host, key), nil
+
+	return formUploader.Put(
+		context.Background(),
+		&storage.PutRet{},
+		upToken,
+		args.Path,
+		bytes.NewReader(args.Body),
+		args.Size,
+		&storage.PutExtra{},
+	)
 }

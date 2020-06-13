@@ -5,12 +5,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-
-	"github.com/tiantour/conf"
-)
-
-var (
-	cfs = conf.NewImage().Data["server"]
 )
 
 // Server server
@@ -21,27 +15,31 @@ func NewServer() *Server {
 	return &Server{}
 }
 
-// Net net upload
-func (s *Server) Net(url string) (string, error) {
-	body, err := NewFile().Net(url)
+// Local local upload
+func (s *Server) Local(args *File) (string, error) {
+	args.Name = NewFormat().Name(args)
+	args.Path = NewFormat().Path(args)
+
+	err := s.do(args)
 	if err != nil {
 		return "", err
 	}
-	return s.Local(body)
+
+	path := fmt.Sprintf("%s/%s", cfs.Host, args.Path)
+	return path, nil
 }
 
-// Local local upload
-func (s *Server) Local(imageByte []byte) (imagePath string, err error) {
-	path := fmt.Sprintf("%s/%s", cfs.Bucket, NewFile().Name())
+// do
+func (s *Server) do(args *File) error {
+	path := fmt.Sprintf("%s/%s", cfs.Bucket, args.Path)
+
 	f, err := os.Create(path)
 	if err != nil {
-		return "", err
+		return err
 	}
 	defer f.Close()
-	data := bytes.NewBuffer(imageByte) // io.reader
-	_, err = io.Copy(f, data)          // write
-	if err != nil {
-		return "", err
-	}
-	return fmt.Sprintf("%s/%s", cfs.Host, path), nil
+
+	body := bytes.NewBuffer(args.Body)
+	_, err = io.Copy(f, body)
+	return err
 }

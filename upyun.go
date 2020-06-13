@@ -4,22 +4,8 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/tiantour/conf"
 	"github.com/upyun/go-sdk/upyun"
 )
-
-var (
-	up  *upyun.UpYun
-	cfu = conf.NewImage().Data["upyun"]
-)
-
-func init() {
-	up = upyun.NewUpYun(&upyun.UpYunConfig{
-		Bucket:   cfu.Bucket,
-		Operator: cfu.Uname,
-		Password: cfu.Passwd,
-	})
-}
 
 // Upyun upyun
 type Upyun struct{}
@@ -29,24 +15,26 @@ func NewUpyun() *Upyun {
 	return &Upyun{}
 }
 
-// Net net upload
-func (u *Upyun) Net(url string) (string, error) {
-	body, err := NewFile().Net(url)
+// Local local upload
+func (u *Upyun) Local(args *File) (string, error) {
+	args.Name = NewFormat().Name(args)
+	args.Path = NewFormat().Path(args)
+
+	err := u.do(args)
 	if err != nil {
 		return "", err
 	}
-	return u.Local(body)
+
+	path := fmt.Sprintf("%s/%s", cfu.Host, args.Path)
+	return path, nil
 }
 
-// Local local upload
-func (u *Upyun) Local(body []byte) (string, error) {
-	path := fmt.Sprintf("%s/%s", cfu.Bucket, NewFile().Name())
-	err := up.Put(&upyun.PutObjectConfig{
+// do
+func (u *Upyun) do(args *File) error {
+	path := fmt.Sprintf("%s/%s", cfu.Bucket, args.Path)
+
+	return up.Put(&upyun.PutObjectConfig{
 		Path:   path,
-		Reader: bytes.NewBuffer(body),
+		Reader: bytes.NewReader(args.Body),
 	})
-	if err != nil {
-		return "", err
-	}
-	return fmt.Sprintf("%s/%s", cfu.Host, path), nil
 }
