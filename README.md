@@ -2,33 +2,46 @@
 
 upload image to server,qiniu,upaiyun with go
 
-# conf.server
+qiniu demo
 
-    image.ServerBucket = "your bucket default null"
-    image.ServerHost = "your host default null"
+```package main
 
-# conf.qiniu
+import (
+	"fmt"
 
-    image.QiniuBucket = "your bucket default null"
-    image.QiniuHost = "your host default null"
-    image.QiniuUname = "your uname default null"
-    image.QiniuPasswd = "your passwd default null"
+	"github.com/tiantour/image/qiniu"
+)
 
-# conf.upyun
+func main() {
+	qiniu.AccessKey = "your access key"
+	qiniu.SecretKey = "your secret key"
+	err := qiniu.NewUpload().FromFile(&qiniu.Qiniu{
+		Bucket:    "your bucket",
+		Key:       "your file name",
+		LocalPath: "your file path",
+	})
+	fmt.Println(err)
+}
+```
 
-    image.UpyunBucket = "your bucket default null"
-    image.UpyunHost = "your host default null"
-    image.UpyunUname = "your uname default null"
-    image.UpyunPasswd = "your passwd default null"
+upyun demo
 
-# server 
+```package main
 
-    image.NewServer().XYZ()
+import (
+	"fmt"
 
-# qiniu 
+	"github.com/tiantour/image/upyun"
+)
 
-    image.NewQiniu.XYZ()
-    
-# upyun
+func main() {
+	upyun.Operator = "your operator"
+	upyun.Password = "your password"
+	err := upyun.NewUpload().FromFile(&upyun.Upyun{
+		Bucket:    "your bucket",
+		Key:       "your file name",
+		LocalPath: "your file path",
+	})
+	fmt.Println(err)
+}```
 
-    image.NewUpyun.XYZ()
