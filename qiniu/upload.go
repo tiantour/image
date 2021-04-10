@@ -21,7 +21,7 @@ func (u *Upload) FromFile(args *Qiniu) error {
 	formUploader := storage.NewFormUploader(&storage.Config{
 		Zone:          &storage.ZoneHuanan, // 空间对应的机房
 		UseHTTPS:      true,                // 是否使用https域名
-		UseCdnDomains: false,               // 上传是否使用CDN上传加速
+		UseCdnDomains: true,                // 上传是否使用CDN上传加速
 	})
 	putExtra := storage.PutExtra{}
 	upToken := NewToken().Access(args.Bucket)
