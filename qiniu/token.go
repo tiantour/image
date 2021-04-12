@@ -20,7 +20,6 @@ func (t *Token) Access(bucket string) string {
 	putPolicy := storage.PutPolicy{
 		Scope: bucket,
 	}
-	putPolicy.Expires = 7200
 
 	mac := qbox.NewMac(AccessKey, SecretKey)
 	return putPolicy.UploadToken(mac)
@@ -28,10 +27,10 @@ func (t *Token) Access(bucket string) string {
 
 // Overwrite qiniu overwrite token
 func (t *Token) Overwrite(bucket, key string) string {
+	scope := fmt.Sprintf("%s:%s", bucket, key)
 	putPolicy := storage.PutPolicy{
-		Scope: fmt.Sprintf("%s:%s", bucket, key),
+		Scope: scope,
 	}
-	putPolicy.Expires = 7200
 
 	mac := qbox.NewMac(AccessKey, SecretKey)
 	return putPolicy.UploadToken(mac)
