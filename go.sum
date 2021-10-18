@@ -1,5 +1,5 @@
-github.com/qiniu/go-sdk/v7 v7.9.2 h1:Oqck4GUAsxJl5EpeE2L0He8Ez/YhtNfqqbhhwLJGykA=
-github.com/qiniu/go-sdk/v7 v7.9.2/go.mod h1:Eeqk1/Km3f1MuLUUkg2JCSg/dVkydKbBvEdJJqFgn9g=
+github.com/qiniu/go-sdk/v7 v7.10.0 h1:vgACFr0GJ1svBYRWwcWz2HWI2N5MxmhgTSsKRmaNsAE=
+github.com/qiniu/go-sdk/v7 v7.10.0/go.mod h1:Eeqk1/Km3f1MuLUUkg2JCSg/dVkydKbBvEdJJqFgn9g=
 github.com/upyun/go-sdk v2.1.0+incompatible h1:OdjXghQ/TVetWV16Pz3C1/SUpjhGBVPr+cLiqZLLyq0=
 github.com/upyun/go-sdk v2.1.0+incompatible/go.mod h1:eu3F5Uz4b9ZE5bE5QsCL6mgSNWRwfj0zpJ9J626HEqs=
 golang.org/x/sync v0.0.0-20201207232520-09787c993a3a h1:DcqTD9SDLc+1P/r1EmRBwnVsrOwW+kk2vWf9n+1sGhs=
